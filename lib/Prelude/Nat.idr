@@ -139,10 +139,10 @@ instance Cast Integer Nat where
   cast = fromInteger
 
 record Multiplicative : Type where
-  getMultiplicative : Nat -> Multiplicative
+  getMultiplicative : (fromMultiplicative : Nat) -> Multiplicative
 
 record Additive : Type where
-  getAdditive : Nat -> Additive
+  getAdditive : (fromAdditive : Nat) -> Additive
 
 instance Semigroup Multiplicative where
   (<+>) left right = getMultiplicative $ left' * right'

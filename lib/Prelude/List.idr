@@ -9,6 +9,7 @@ import Prelude.Fold
 import Prelude.Monad
 import Prelude.Maybe
 import Prelude.Nat
+import Prelude.Traversal
 
 %access public
 %default total
@@ -174,6 +175,10 @@ instance Functor List where
 instance Foldable List where
   foldMap f []      = neutral
   foldMap f (x::xs) = f x <+> foldMap f xs
+
+instance Traversable List where
+  traverse f []      = pure []
+  traverse f (x::xs) = map (::) (f x) <$> traverse f xs
 
 instance Applicative List where
   pure x = [x]

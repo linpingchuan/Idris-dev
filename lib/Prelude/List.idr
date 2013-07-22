@@ -4,6 +4,7 @@ import Builtins
 
 import Prelude.Algebra
 import Prelude.Functor
+import Prelude.Fold
 import Prelude.Maybe
 import Prelude.Nat
 
@@ -167,6 +168,10 @@ instance Monoid (List a) where
 instance Functor List where
   map f []      = []
   map f (x::xs) = f x :: map f xs
+
+instance Foldable List where
+  foldMap f []      = neutral
+  foldMap f (x::xs) = f x <+> foldMap f xs
 
 --------------------------------------------------------------------------------
 -- Zips and unzips

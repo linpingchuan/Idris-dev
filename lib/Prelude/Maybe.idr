@@ -44,10 +44,6 @@ toMaybe False j = Nothing
 justInjective : {x : t} -> {y : t} -> (Just x = Just y) -> x = y
 justInjective refl = refl
 
-lowerMaybe : Monoid a => Maybe a -> a
-lowerMaybe Nothing = neutral
-lowerMaybe (Just x) = x
-
 raiseToMaybe : (Monoid a, Eq a) => a -> Maybe a
 raiseToMaybe x = if x == neutral then Nothing else Just x
 
@@ -64,6 +60,10 @@ instance (Eq a) => Eq (Maybe a) where
 instance Functor Maybe where 
   map f (Just x) = Just (f x)
   map f Nothing  = Nothing
+
+instance Foldable Maybe where
+  foldMap _ Nothing = neutral
+  foldMap f (Just x) = f x
 
 instance Applicative Maybe where
   pure = Just
@@ -96,4 +96,4 @@ instance (Monoid a, Eq a) => Cast a (Maybe a) where
   cast = raiseToMaybe
 
 instance (Monoid a) => Cast (Maybe a) a where
-  cast = lowerMaybe
+  cast = foldMap id

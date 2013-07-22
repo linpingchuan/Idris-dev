@@ -4,6 +4,7 @@ import Builtins
 import Prelude.Algebra
 import Prelude.Cast
 import Prelude.Fold
+import Prelude.Traversal
 import Prelude.Monad
 
 %access public
@@ -64,6 +65,10 @@ instance Functor Maybe where
 instance Foldable Maybe where
   foldMap _ Nothing = neutral
   foldMap f (Just x) = f x
+
+instance Traversable Maybe where
+  traverse _ Nothing = pure Nothing
+  traverse f (Just x) = map Just (f x)
 
 instance Applicative Maybe where
   pure = Just

@@ -247,17 +247,6 @@ foldr f e (x::xs) = f x (foldr f e xs)
 -- Special folds
 --------------------------------------------------------------------------------
 
-mconcat : Monoid a => List a -> a
-mconcat = foldr (<+>) neutral
-
-concat : List (List a) -> List a
-concat []      = []
-concat (x::xs) = x ++ concat xs
-
-concatMap : (a -> List b) -> List a -> List b
-concatMap f []      = []
-concatMap f (x::xs) = f x ++ concatMap f xs
-
 and : List Bool -> Bool
 and = foldr (&&) True
 
@@ -290,7 +279,7 @@ intersperse sep (x::xs) = x :: intersperse' sep xs
     intersperse' sep (y::ys) = sep :: y :: intersperse' sep ys
 
 intercalate : List a -> List (List a) -> List a
-intercalate sep l = concat $ intersperse sep l
+intercalate sep l = fold $ intersperse sep l
 
 --------------------------------------------------------------------------------
 -- Membership tests

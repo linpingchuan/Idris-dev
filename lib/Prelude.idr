@@ -6,6 +6,7 @@ import IO
 import Prelude.Cast
 import Prelude.Nat
 import Prelude.Fin
+import Prelude.Fold
 import Prelude.List
 import Prelude.Maybe
 import Prelude.Monad
@@ -14,6 +15,7 @@ import Prelude.Functor
 import Prelude.Either
 import Prelude.Vect
 import Prelude.Strings
+import Prelude.Traversal
 import Prelude.Chars
 
 %access public

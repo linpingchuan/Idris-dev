@@ -3,8 +3,10 @@ module Prelude.List
 import Builtins
 
 import Prelude.Algebra
+import Prelude.Applicative
 import Prelude.Functor
 import Prelude.Fold
+import Prelude.Monad
 import Prelude.Maybe
 import Prelude.Nat
 
@@ -172,6 +174,17 @@ instance Functor List where
 instance Foldable List where
   foldMap f []      = neutral
   foldMap f (x::xs) = f x <+> foldMap f xs
+
+instance Applicative List where
+  pure x = [x]
+  fs <$> vs = foldMap (\f => map f vs) fs
+
+instance Alternative List where
+  empty = []
+  (<|>) = (++)
+
+instance Monad List where 
+  m >>= f = foldMap f m
 
 --------------------------------------------------------------------------------
 -- Zips and unzips

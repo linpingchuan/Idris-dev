@@ -2,6 +2,10 @@ module Prelude.Either
 
 import Builtins
 
+import Prelude.Functor
+import Prelude.Fold
+import Prelude.Applicative
+import Prelude.Monad
 import Prelude.Maybe
 import Prelude.List
 
@@ -62,6 +66,23 @@ maybeToEither : e -> Maybe a -> Either e a
 maybeToEither def (Just j) = Right j
 maybeToEither def Nothing  = Left  def
 
+--------------------------------------------------------------------------------
+-- Instances
+--------------------------------------------------------------------------------
+
+instance Functor (Either e) where
+  map f (Left l) = Left l
+  map f (Right r) = Right (f r)
+
+instance Applicative (Either e) where
+  pure = Right
+  (Left a) <$> _          = Left a
+  (Right f) <$> (Right r) = Right (f r)
+  (Right _) <$> (Left l)  = Left l
+
+instance Monad (Either e) where
+    (Left n) >>= _ = Left n
+    (Right r) >>= f = f r
 
 --------------------------------------------------------------------------------
 -- Injectivity of constructors

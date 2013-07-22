@@ -1,3 +1,6 @@
+import Prelude.Functor
+import Prelude.Applicative
+import Prelude.Monad
 import Prelude.List
 
 %access public
@@ -104,4 +107,15 @@ mkLazyForeign : Foreign x -> x
 fork : |(thread:IO ()) -> IO Ptr
 fork x = io_return prim__vm -- compiled specially
 
+---- Instances
+
+instance Functor IO where
+    map f io = io_bind io (io_return . f)
+
+instance Applicative IO where
+    pure = io_return
+    am <$> bm = io_bind am (\f => io_bind bm (io_return . f))
+
+instance Monad IO where 
+    b >>= k = io_bind b k
 

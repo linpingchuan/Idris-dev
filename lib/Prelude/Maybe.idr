@@ -3,6 +3,8 @@ module Prelude.Maybe
 import Builtins
 import Prelude.Algebra
 import Prelude.Cast
+import Prelude.Fold
+import Prelude.Monad
 
 %access public
 %default total
@@ -53,15 +55,29 @@ raiseToMaybe x = if x == neutral then Nothing else Just x
 -- Class instances
 --------------------------------------------------------------------------------
 
-maybe_bind : Maybe a -> (a -> Maybe b) -> Maybe b
-maybe_bind Nothing  k = Nothing
-maybe_bind (Just x) k = k x
-
 instance (Eq a) => Eq (Maybe a) where
   Nothing  == Nothing  = True
   Nothing  == (Just _) = False
   (Just _) == Nothing  = False
   (Just a) == (Just b) = a == b
+
+instance Functor Maybe where 
+  map f (Just x) = Just (f x)
+  map f Nothing  = Nothing
+
+instance Applicative Maybe where
+  pure = Just
+  (Just f) <$> (Just a) = Just (f a)
+  _        <$> _        = Nothing
+
+instance Alternative Maybe where
+  empty = Nothing
+  (Just x) <|> _ = Just x
+  Nothing  <|> v = v
+
+instance Monad Maybe where 
+  Nothing  >>= k = Nothing
+  (Just x) >>= k = k x
 
 -- | Lift a semigroup into 'Maybe' forming a 'Monoid' according to
 -- <http://en.wikipedia.org/wiki/Monoid>: "Any semigroup S may be
